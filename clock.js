@@ -163,8 +163,8 @@ function setMonth(secRad, step){
         let ctx = cvDays.getContext("2d");
         ctx.clearRect(0,0,cvDays.width, cvDays.height); // ready to redraw the month dates
     }
-    setWheel(cvDays, clock.monthRad, null, clock.monthLen, dom, false);
-    setYears(year-1); // sets list of years from one before this
+    setWheel(cvDays, secRad, null, clock.monthLen, dom, false);
+    if(years.length ===0){setYears(year-1);} // sets list of years from one before this
 }
 function sizeInnerWheel(secRad){
     let maxNum = measureDigits(); // decides dial size based upon font
@@ -197,7 +197,7 @@ function runTime() {
         setMonth(clock.monthRad, 0);
     }
     month += monthDay / clock.monthLen;
-    let year = 1 + month / 12; // cos always second year on dial
+    let year = (now.getFullYear() - parseInt(years[0])) + month / 12;
     cvSec.style.transform = "rotate(" + (secs/60 * fullTurn) + "deg)";
     cvMins.style.transform = "rotate(" + (mins / 60 * fullTurn) + "deg)";
     cvHours.style.transform = "rotate(" + (hrs / 24 * fullTurn) + "deg)";
@@ -260,6 +260,7 @@ function initialise() {
     setDays();
     clock.maxDrop = measureDescender("gyqj"); // to position text
     setupWheels();
+    //clock.lastMonth = -1; // test
     setInterval(runTime, 50);
 }
 initialise();
